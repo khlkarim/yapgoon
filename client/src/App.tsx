@@ -19,8 +19,6 @@ function App() {
         </Route>
 
         <Route element={<MainLayout />}>
-          <Route index element={<Channels />}></Route>
-
           <Route path='inbox' element={<Inbox />}></Route>
           <Route path='channels' element={<Channels />}></Route>
           <Route path='profile/*' element={<Profile />}></Route>
