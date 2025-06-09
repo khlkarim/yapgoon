@@ -19,6 +19,8 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 # Copy the built app from the builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
 # Expose port 80
 EXPOSE 80
 # Start Nginx

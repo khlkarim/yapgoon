@@ -13,7 +13,7 @@ import { User } from './users/entities/user.entity';
     ChannelModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'mysql',
       port: 3306,
       username: 'root',
       password: 'yapgoon',

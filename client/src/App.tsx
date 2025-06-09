@@ -1,6 +1,6 @@
 import './App.css';
 
-import { Routes, Route } from 'react-router'
+import { Routes, Route, Navigate } from 'react-router'
 import AuthLayout from './layouts/AuthLayout'
 import MainLayout from './layouts/MainLayout'
 import Login from './pages/auth/Login'
@@ -19,9 +19,14 @@ function App() {
         </Route>
 
         <Route element={<MainLayout />}>
-          <Route path='inbox' element={<Inbox />}></Route>
-          <Route path='channels' element={<Channels />}></Route>
-          <Route path='profile/*' element={<Profile />}></Route>
+          <Route path='/inbox' element={<Inbox />}></Route>
+          <Route path='/channels' element={<Channels />}></Route>
+          <Route path='/profile/*' element={<Profile />}></Route>
+
+          <Route
+            path="*"
+            element={<Navigate to="/channels" replace />}
+          />
         </Route>
       </Routes>
     </div>
