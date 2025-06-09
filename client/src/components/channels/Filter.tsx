@@ -11,7 +11,7 @@ function Filter({ filters, filterList }: FilterProps){
     }
     
     return (
-        <form onSubmit={handleSubmit} className="box flex channel-filter">
+        <form onSubmit={handleSubmit} className="box flex">
             <input
                 type="text"
                 name="search"

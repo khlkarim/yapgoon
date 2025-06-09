@@ -2,9 +2,13 @@ import Filter from "./sidebar/Filter";
 import List from "./sidebar/List";
 
 function SideBar(){
+    function filterList(){
+        console.log("hi");
+    }
+
     return (
         <div className="box sidebar flex column">
-            <Filter />
+            <Filter filters={null} filterList={filterList} />
             <List />
         </div>
     );

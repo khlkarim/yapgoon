@@ -4,10 +4,10 @@ function AuthNavBar() {
     return (
         <nav className="box flex w-80">
             <NavLink to='/login' className={({ isActive }) => isActive? 'active':''}>
-                <button className="box">Login</button>
+                <button className="box button">Login</button>
             </NavLink>
             <NavLink to='/register' className={({ isActive }) => isActive? 'active':''}>
-                <button className="box">Register</button>
+                <button className="box button">Register</button>
             </NavLink>
         </nav>
     );  
