@@ -17,6 +17,9 @@ export class Channel {
   name: string;
 
   @Column()
+  description: string;
+
+  @Column()
   status: boolean;
 
   @CreateDateColumn()

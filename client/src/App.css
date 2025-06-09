@@ -42,3 +42,12 @@ a.active > button.box {
   color: black;
   background: white;
 }
+.channel-filter{
+  justify-content: space-between;
+}
+
+.button:hover{
+  cursor: pointer;
+  color: black;
+  background: white;
+}

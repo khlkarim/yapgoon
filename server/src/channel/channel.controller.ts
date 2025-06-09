@@ -6,12 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 
-@Controller('channel')
+@Controller('channels')
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
@@ -21,8 +22,8 @@ export class ChannelController {
   }
 
   @Get()
-  findAll() {
-    return this.channelService.findAll();
+  findAll(@Query('name') name: string | null) {
+    return this.channelService.findAll(name);
   }
 
   @Get(':id')

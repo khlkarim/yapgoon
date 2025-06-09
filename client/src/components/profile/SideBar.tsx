@@ -9,13 +9,13 @@ function SideBar(){
 
             <nav className="flex column">
                 <NavLink to='/profile' end className={({ isActive }) => isActive? 'active':''}>
-                    <button className='box w-100'>Edit Profile</button>
+                    <button className='box w-100 button'>Edit Profile</button>
                 </NavLink>
                 <NavLink to='/profile/owned-channels' className={({ isActive }) => isActive? 'active':''}>
-                    <button className='box w-100'>Owned Channels</button>
+                    <button className='box w-100 button'>Owned Channels</button>
                 </NavLink>
                 <NavLink to='/profile/joined-channels' className={({ isActive }) => isActive? 'active':''}>
-                    <button className='box w-100'>Joined Channels</button>
+                    <button className='box w-100 button'>Joined Channels</button>
                 </NavLink>
             </nav>
         </div>
