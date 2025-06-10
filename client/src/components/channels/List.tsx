@@ -1,4 +1,5 @@
 import useFetch from "../../hooks/useFetch";
+import { useUser } from "../../hooks/useUser";
 import type { IChannel } from "../../interfaces/entities/IChannel";
 import type { IFetch } from "../../interfaces/fetch/IFetch";
 import type { ListProps } from "../../interfaces/IProps";
@@ -6,8 +7,9 @@ import Item from "./list/Item";
 
 function List({ filters }: ListProps) {
     const { data, isLoading, error }: IFetch = useFetch({
-        uri: 'channels',
-        filters
+        endpoint: 'channels',
+        method: 'GET',
+        payload: (filters as object)
     });
 
     if (isLoading) {

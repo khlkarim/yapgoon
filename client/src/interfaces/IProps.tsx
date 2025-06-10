@@ -5,8 +5,9 @@ export interface ListProps {
 }
 
 export interface useFetchProps {
-    uri: string;
-    filters: IPartialChannel;
+    endpoint: string | null;
+    method: string | null;
+    payload: object | null;
 }
 
 export interface FilterProps extends ListProps {

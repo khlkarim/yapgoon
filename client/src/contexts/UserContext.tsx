@@ -1,14 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
+import type { IUserContext } from "../interfaces/entities/IUser";
 
-export const UserContext = createContext({user: null, setUser: null});
-
-
-export function UserProvider({ children }) {
-    const [user, setUser] = useState(null);
-
-    return (
-        <UserContext.Provider value={{user, setUser}}>
-            { children }
-        </UserContext.Provider>
-    );
-}
+export const UserContext = createContext<IUserContext>({
+    user: null,
+    setUser: null
+});

@@ -2,31 +2,41 @@ import { useEffect, useState } from "react";
 import type { IFetch } from "../interfaces/fetch/IFetch";
 import type { useFetchProps } from "../interfaces/IProps";
 
-function useFetch({uri, filters}: useFetchProps): IFetch {
+function useFetch({endpoint, method, payload}: useFetchProps): IFetch {
     const [data, setData] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!uri) return;
+        if (!endpoint || !method) return;
+        if(method == 'POST' && !payload) return;
 
         setIsLoading(true);
         setError(null);
 
-        fetch(
-            'http://localhost:3000/' +
-            uri +
-            '?' +
-            new URLSearchParams(
-                filters && typeof filters === "object"
-                    ? Object.fromEntries(
-                        Object.entries(filters).filter(
-                            ([, v]) => v !== undefined && v !== null
-                        ).map(([k, v]) => [k, String(v)])
-                    )
-                    : {}
-            ).toString()
-        )
+        const url = 'http://localhost:3000/'+endpoint;
+
+        let response;
+
+        if(method == 'GET') {
+            if(payload){
+                response = fetch(url+ '?' + toQueryParams(payload));
+            }else{
+                response = fetch(url);
+            }
+        }else if(method == 'POST' && payload) {
+            response = fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify(payload)
+            });
+        }else{
+            return;
+        }
+
+        response
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,9 +52,19 @@ function useFetch({uri, filters}: useFetchProps): IFetch {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [uri, filters]);
+    }, [endpoint, method, payload]);
 
     return { data, isLoading, error };
 }
 
 export default useFetch;
+
+function toQueryParams(payload: object) {
+    return new URLSearchParams(
+        Object.fromEntries(
+            Object.entries(payload).filter(
+                    ([, v]) => v !== undefined && v !== null
+                ).map(([k, v]) => [k, String(v)])
+        )
+    ).toString();
+} 
