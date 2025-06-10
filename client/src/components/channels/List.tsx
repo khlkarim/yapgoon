@@ -1,5 +1,4 @@
 import useFetch from "../../hooks/useFetch";
-import { useUser } from "../../hooks/useUser";
 import type { IChannel } from "../../interfaces/entities/IChannel";
 import type { IFetch } from "../../interfaces/fetch/IFetch";
 import type { ListProps } from "../../interfaces/IProps";
