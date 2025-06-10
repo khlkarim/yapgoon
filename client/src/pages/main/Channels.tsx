@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Filter from "../../components/channels/Filter";
 import List from "../../components/channels/List";
-import type { IPartialChannel } from "../../interfaces/entities/IChannel";
+import type { IPartialChannel } from "../../types/IChannel";
 
 function Channels(){
     const [filters, setFilters] = useState<IPartialChannel>(null);
 
-    function filterList(filters: IPartialChannel){
+    function filterList(filters: IPartialChannel) {
         if(filters){
             setFilters((prev) => ({
                 ...prev,

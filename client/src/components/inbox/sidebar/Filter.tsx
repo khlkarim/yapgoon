@@ -1,6 +1,10 @@
-import { useState } from "react";
-import type { FilterProps } from "../../../interfaces/IProps";
-import type { IPartialChannel } from "../../../interfaces/entities/IChannel";
+import { useState, type Dispatch, type SetStateAction } from "react";
+import type { IPartialChannel } from "../../../types/IChannel";
+
+interface FilterProps {
+    filters: IPartialChannel,
+    filterList: Dispatch<SetStateAction<IPartialChannel>>
+}
 
 function Filter({ filters, filterList }: FilterProps){
     const [search, setSearch] = useState(filtersToString(filters));

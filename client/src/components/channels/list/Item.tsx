@@ -1,4 +1,4 @@
-import type { IChannel } from "../../../interfaces/entities/IChannel";
+import type { IChannel } from "../../../types/IChannel";
 
 interface ItemProps {
     channel: IChannel

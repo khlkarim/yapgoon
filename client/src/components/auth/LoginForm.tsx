@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { NavLink } from "react-router";
+import { useUser } from "../../hooks/useUser";
+import { loginUser } from "../../utils/api";
 
 function LoginForm(){
+    const { setUser } = useUser();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+    function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        console.log(e);
+        loginUser({
+            user:{
+                username, 
+                password
+            }, 
+            setUser
+        });
     }
 
     return (

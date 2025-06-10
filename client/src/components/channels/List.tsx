@@ -1,20 +1,21 @@
 import useFetch from "../../hooks/useFetch";
-import type { IChannel } from "../../interfaces/entities/IChannel";
-import type { IFetch } from "../../interfaces/fetch/IFetch";
-import type { ListProps } from "../../interfaces/IProps";
+import type { IChannel, IPartialChannel } from "../../types/IChannel";
 import Item from "./list/Item";
 
+interface ListProps {
+    filters: IPartialChannel
+}
+
 function List({ filters }: ListProps) {
-    const { data, isLoading, error }: IFetch = useFetch({
+    const { data, isLoading, error } = useFetch({
         endpoint: 'channels',
-        method: 'GET',
-        payload: (filters as object)
+        params: (filters as object)
     });
 
     if (isLoading) {
         return (
             <div className="box">
-                <h3>Loading ...</h3>
+                <h4>Loading ...</h4>
             </div>
         );
     }
@@ -22,7 +23,7 @@ function List({ filters }: ListProps) {
     if (error) {
         return (
             <div className="box">
-                <h3>Error: {error}</h3>
+                <h4>Error: {error}</h4>
             </div>
         );
     }
@@ -37,7 +38,7 @@ function List({ filters }: ListProps) {
 
     return (
         <div className="box flex column">
-            {(data as IChannel[]).map((channel: IChannel) => (
+            {(data as IChannel[]).map((channel) => (
                 <Item key={channel.id} channel={channel} />
             ))}
         </div>
