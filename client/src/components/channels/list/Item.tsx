@@ -1,7 +1,9 @@
 import type { IChannel } from "../../../types/IChannel";
+import type { IPartialUser } from "../../../types/IUser";
 
 interface ItemProps {
-    channel: IChannel
+    channel: IChannel;
+    user: IPartialUser;
 }
 
 function Item({ channel }: ItemProps) {

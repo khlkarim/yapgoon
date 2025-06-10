@@ -1,7 +1,8 @@
 import { NavLink } from "react-router";
 import { useUser } from "../../hooks/useUser";
-import { useState, type FormEvent } from "react";
-import { registerUser } from "../../utils/api";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { register } from "../../api/users/register";
+import TextInput from "../form/TextInput";
 
 function RegisterForm(){
     const { setUser } = useUser();
@@ -10,54 +11,35 @@ function RegisterForm(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    function handleChange(e: ChangeEvent<HTMLInputElement>){
+        const { name, value } = e.target;
+        
+        switch(name) {
+            case "username":
+                setUsername(value);
+                break;
+            case "email":
+                setEmail(value);
+                break;
+            case "password":
+                setPassword(value);
+                break;
+        }
+    }
+
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-
-        registerUser({user: {
-            username, 
-            email, 
-            password
-        }, setUser});
+        register({user: {username, email, password}, setUser});
     }
 
     return (
         <form className="flex column" onSubmit={handleSubmit}>
-            <div className="box flex column">
-                <label htmlFor="username">Username</label>
-                <input 
-                    type="text"
-                    name="username"
-                    value={username}
-                    style={{ background: 'black' }}
-                    className="box" 
-                    placeholder="Your Username..."
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </div>
-            <div className="box flex column">
-                <label htmlFor="email">Email</label>
-                <input 
-                    type="text"
-                    name="email"
-                    value={email}
-                    style={{ background: 'black' }}
-                    className="box" 
-                    placeholder="Your Email..."
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </div>
-            <div className="box flex column">
-                <label htmlFor="password">Password</label>
-                <input 
-                    type="password" 
-                    name="password" 
-                    value={password}
-                    className="box" 
-                    placeholder="Your Password..." 
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </div>
+            <TextInput name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
+            <TextInput name="email" value={email} placeholder="Your Email..." handleChange={handleChange} />
+            <TextInput name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
+
             <button type="submit" className="box button" style={{ padding: '15px 0px'}}>Register</button>
+
             <NavLink to='/login'>
                 <p>you already have an account?</p>
             </NavLink>

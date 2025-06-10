@@ -1,4 +1,5 @@
 import useFetch from "../../hooks/useFetch";
+import { useUser } from "../../hooks/useUser";
 import type { IChannel, IPartialChannel } from "../../types/IChannel";
 import Item from "./list/Item";
 
@@ -7,6 +8,8 @@ interface ListProps {
 }
 
 function List({ filters }: ListProps) {
+    const { user } = useUser();
+
     const { data, isLoading, error } = useFetch({
         endpoint: 'channels',
         params: (filters as object)
@@ -39,7 +42,7 @@ function List({ filters }: ListProps) {
     return (
         <div className="box flex column">
             {(data as IChannel[]).map((channel) => (
-                <Item key={channel.id} channel={channel} />
+                <Item key={channel.id} channel={channel} user={user}/>
             ))}
         </div>
     );

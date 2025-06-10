@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { handleResponse, toQueryParams } from "../utils/utils";
+import { get } from "../api/methods";
 
 interface useFetchProps {
     endpoint: string;
@@ -12,22 +12,19 @@ function useFetch({endpoint, params}: useFetchProps) {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!endpoint) return;
-
         setIsLoading(true);
         setError(null);
 
-        const url = 'http://localhost:3000/'+endpoint;
-
-        let response;
-
-        if(params){
-            response = fetch(url+ '?' + toQueryParams(params));
-        }else{
-            response = fetch(url);
-        }
-
-        handleResponse({response, setData, setIsLoading, setError});
+        get({ endpoint, params })
+            .then((data) => {
+                setData(data);
+            })
+            .catch((err: Error)=>{
+                setError("Error: " + err.message);
+            })
+            .finally(()=>{
+                setIsLoading(false);
+            });
     }, [endpoint, params]);
 
     return { data, isLoading, error };

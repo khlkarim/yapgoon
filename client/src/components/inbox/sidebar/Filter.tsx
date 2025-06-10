@@ -1,5 +1,6 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState, type ChangeEvent, type Dispatch, type SetStateAction } from "react";
 import type { IPartialChannel } from "../../../types/IChannel";
+import TextInput from "../../form/TextInput";
 
 interface FilterProps {
     filters: IPartialChannel,
@@ -9,6 +10,11 @@ interface FilterProps {
 function Filter({ filters, filterList }: FilterProps){
     const [search, setSearch] = useState(filtersToString(filters));
 
+    function handleChange(e: ChangeEvent<HTMLInputElement>){
+        const { value } = e.target;
+        setSearch(value);
+    }
+
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         filterList(stringToFilters(search));
@@ -16,15 +22,7 @@ function Filter({ filters, filterList }: FilterProps){
     
     return (
         <form onSubmit={handleSubmit} className="flex column">
-            <input
-                type="text"
-                name="search"
-                style={{ background: 'black' }}
-                className="box"
-                placeholder="Seach for a specific channel..."
-                value={search}
-                onChange={e => setSearch(e.currentTarget.value)}
-            />
+            <TextInput name="search" value={search} placeholder="Seach for a specific channel... (you can use tags: @name, @owner...)" handleChange={handleChange} />
             <button className="box button">Search</button>
         </form>
     );

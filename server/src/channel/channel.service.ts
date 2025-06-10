@@ -3,7 +3,7 @@ import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from './entities/channel.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ChannelService {
@@ -16,12 +16,7 @@ export class ChannelService {
     return this.channelsRepository.save(createChannelDto);
   }
 
-  findAll(name: string | null) {
-    if (name) {
-      return this.channelsRepository.find({
-        where: { name: Like(`%${name}%`) },
-      });
-    }
+  findAll() {
     return this.channelsRepository.find();
   }
 
