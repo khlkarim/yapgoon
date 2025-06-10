@@ -1,7 +1,9 @@
+import RegisterForm from "../../components/auth/RegisterForm";
+
 function Register(){
     return (
-        <div>
-            Register
+        <div className='flex column w-60'>
+            <RegisterForm />
         </div>
     );
 }

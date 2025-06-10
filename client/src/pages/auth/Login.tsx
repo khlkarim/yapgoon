@@ -1,7 +1,9 @@
+import LoginForm from "../../components/auth/LoginForm";
+
 function Login(){
     return (
-        <div>
-            Login
+        <div className='flex column w-60'>
+            <LoginForm />
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 
 function AuthNavBar() {
     return (
-        <nav className="box flex w-80">
+        <nav className="box flex w-60">
             <NavLink to='/login' className={({ isActive }) => isActive? 'active':''}>
                 <button className="box button">Login</button>
             </NavLink>
