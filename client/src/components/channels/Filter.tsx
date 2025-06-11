@@ -1,6 +1,5 @@
 import type { IPartialChannel } from "../../types/IChannel";
 import { useState, type ChangeEvent } from "react";
-import TextInput from "../form/TextInput";
 
 interface FilterProps {
     filters: IPartialChannel,
@@ -22,7 +21,15 @@ function Filter({ filters, filterList }: FilterProps){
     
     return (
         <form onSubmit={handleSubmit} className="box flex">
-            <TextInput name="search" value={search} placeholder="Seach for a specific channel... (you can use tags: @name, @owner...)" handleChange={handleChange} />
+            <input
+                type="text"
+                name="search"
+                style={{ flex:5, background: 'black' }}
+                className="box"
+                placeholder="Seach for a specific channel... (you can use tags: @name, @owner...)"
+                value={search}
+                onChange={handleChange}
+            />            
             <button className="box button" style={{ flex:2 }}>Search</button>
         </form>
     );

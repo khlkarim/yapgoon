@@ -1,8 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { NavLink } from "react-router";
 import { useUser } from "../../hooks/useUser";
-import { login } from "../../api/users/login";
 import TextInput from "../form/TextInput";
+import { users } from "../../api/users";
 
 function LoginForm(){
     const { setUser } = useUser();
@@ -25,7 +25,7 @@ function LoginForm(){
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        login({user: {username, password}, setUser});
+        users.login({user: {username, password}, setUser});
     }
 
     return (

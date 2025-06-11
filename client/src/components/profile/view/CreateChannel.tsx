@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useUser } from "../../../hooks/useUser";
 import TextInput from "../../form/TextInput";
-import { api } from "../../../utils/api";
+import { channels } from "../../../api/channels";
 
 function CreateChannel() {
     const { user } = useUser();
@@ -28,7 +28,7 @@ function CreateChannel() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        api.createChannel({ channel: {name, description, status}, user });
+        channels.createChannel({ channel: {name, description, status}, user });
     }
 
     return (

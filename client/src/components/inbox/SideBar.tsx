@@ -7,7 +7,7 @@ function SideBar(){
     }
 
     return (
-        <div className="box sidebar flex column">
+        <div className="sidebar flex column">
             <Filter filters={null} filterList={filterList} />
             <List />
         </div>

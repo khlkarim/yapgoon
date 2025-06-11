@@ -1,8 +1,8 @@
 import { NavLink } from "react-router";
 import { useUser } from "../../hooks/useUser";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { register } from "../../api/users/register";
 import TextInput from "../form/TextInput";
+import { users } from "../../api/users";
 
 function RegisterForm(){
     const { setUser } = useUser();
@@ -29,7 +29,7 @@ function RegisterForm(){
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        register({user: {username, email, password}, setUser});
+        users.register({user: {username, email, password}, setUser});
     }
 
     return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { get } from "../api/methods";
+import { api } from "../api/methods";
 
 interface useFetchProps {
     endpoint: string;
@@ -15,7 +15,7 @@ function useFetch({endpoint, params}: useFetchProps) {
         setIsLoading(true);
         setError(null);
 
-        get({ endpoint, params })
+        api.get({ endpoint, params })
             .then((data) => {
                 setData(data);
             })

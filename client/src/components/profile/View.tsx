@@ -6,7 +6,7 @@ import CreateChannel from "./view/CreateChannel";
 
 function View(){
     return (
-        <div className="box view">
+        <div className="view">
             <Routes>
                 <Route path="/" element={<EditProfile />}/>
                 <Route path="/create-channel" element={<CreateChannel />} />

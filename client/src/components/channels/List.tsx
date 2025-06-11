@@ -40,7 +40,7 @@ function List({ filters }: ListProps) {
     }
 
     return (
-        <div className="box flex column">
+        <div className="flex column">
             {(data as IChannel[]).map((channel) => (
                 <Item key={channel.id} channel={channel} user={user}/>
             ))}

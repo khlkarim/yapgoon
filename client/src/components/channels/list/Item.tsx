@@ -16,6 +16,8 @@ function Item({ channel }: ItemProps) {
                     <div style={{ color: 'grey' }}>{channel.status ? 'Public' : 'Private'}</div>
                     <span style={{ color: 'grey' }}>•</span>
                     <div style={{ color: 'grey' }}>{new Date(channel.createdAt).toLocaleDateString()}</div>
+                    <span style={{ color: 'grey' }}>•</span>
+                    <div style={{ color: 'grey' }}>{channel.owner == ''}</div>
                 </div>
                 <div>
                     <p>{channel.description}</p>

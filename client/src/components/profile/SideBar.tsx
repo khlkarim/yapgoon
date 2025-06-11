@@ -4,7 +4,7 @@ import User from "./sidebar/User";
 
 function SideBar(){
     return (
-        <div className="box sidebar flex column" style={{ justifyContent:'start' }}>
+        <div className="sidebar flex column" style={{ justifyContent:'start' }}>
             <User />
 
             <nav className="flex column">
