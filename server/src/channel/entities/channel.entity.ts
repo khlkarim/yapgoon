@@ -1,4 +1,4 @@
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   Column,
@@ -6,6 +6,7 @@ import {
   ManyToOne,
   ManyToMany,
   CreateDateColumn,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -19,7 +20,7 @@ export class Channel {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ type: 'boolean' })
   status: boolean;
 
   @CreateDateColumn()
@@ -28,6 +29,7 @@ export class Channel {
   @ManyToOne(() => User, (user) => user.ownedChannels, { eager: true })
   owner: User;
 
-  @ManyToMany(() => User, (user) => user.joinedChannels)
+  @ManyToMany(() => User, (user) => user.joinedChannels, { eager: true })
+  @JoinTable()
   members: User[];
 }

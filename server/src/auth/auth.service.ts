@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UsersService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -26,6 +26,6 @@ export class AuthService {
 
   async register(user: CreateUserDto): Promise<any> {
     await this.userService.create(user);
-    return await this.login(user.username, user.password);
+    return this.login(user.username, user.password);
   }
 }

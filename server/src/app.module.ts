@@ -5,12 +5,11 @@ import { ChannelModule } from './channel/channel.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Channel } from './channel/entities/channel.entity';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { User } from './users/entities/user.entity';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
-    ChannelModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -22,7 +21,8 @@ import { User } from './users/entities/user.entity';
       synchronize: true,
     }),
     AuthModule,
-    UsersModule,
+    UserModule,
+    ChannelModule,
   ],
   controllers: [AppController],
   providers: [AppService],
