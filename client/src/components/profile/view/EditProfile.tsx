@@ -24,9 +24,10 @@ function EditProfile(){
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        users.register({user: {username, email}, setUser});
+        users.editProfile({user: {username, email}, setUser});
     }
 
+    console.log(user);
     return (
         <form className="flex column" onSubmit={handleSubmit}>
             <TextInput name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />

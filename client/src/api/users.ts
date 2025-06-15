@@ -11,8 +11,11 @@ function login({user, setUser}: Params) {
     if(user) {
         api.post({endpoint: 'auth/login', body: (user as object)})
         .then((data) => {
+            user.email = data.email;
             user.access_token = data.access_token;
             setUser(user);
+        }).catch((error) => {
+            alert(error);
         });
     }
     
@@ -24,17 +27,21 @@ function register({user, setUser}: Params) {
         .then((data) => {
             user.access_token = data.access_token;
             setUser(user);
+        }).catch((error) => {
+            alert(error);
         });
     }
 }
 
 function editProfile({user, setUser}: Params) {
     if(user) {
-        api.post({endpoint: 'auth/edit-profile', body: (user as object)})
+        api.patch({endpoint: 'users/'+user.id, body: (user as object)})
         .then((data) => {
             user.access_token = data.access_token;
             setUser(user);
-        });
+        }).catch((error) => {
+            alert(error);
+        }); 
     }
 }
 
