@@ -4,14 +4,15 @@ import type { IChannel, IPartialChannel } from "../../types/IChannel";
 import Item from "./list/Item";
 
 interface ListProps {
+    endpoint: string,
     filters: IPartialChannel
 }
 
-function List({ filters }: ListProps) {
+function List({ endpoint, filters }: ListProps) {
     const { user } = useUser();
 
     const { data, isLoading, error } = useFetch({
-        endpoint: 'channels',
+        endpoint,
         params: (filters as object)
     });
 

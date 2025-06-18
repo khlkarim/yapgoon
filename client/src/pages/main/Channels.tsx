@@ -20,7 +20,7 @@ function Channels(){
     return (
         <div className='flex column w-80'>
             <Filter filters={filters} filterList={filterList} />
-            <List filters={filters} />
+            <List endpoint={'channels'} filters={filters} />
         </div>
     );
 }

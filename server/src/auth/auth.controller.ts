@@ -1,7 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -9,13 +17,33 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() signInDto: SignInDto) {
-    return this.authService.login(signInDto.username, signInDto.password);
+  async login(
+    @Res({ passthrough: true }) res: Response,
+    @Body() signInDto: SignInDto,
+  ) {
+    const token = await this.authService.login(
+      signInDto.username,
+      signInDto.password,
+    );
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return { message: 'Login successful' };
   }
 
   @Post('register')
   @HttpCode(HttpStatus.OK)
   register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('jwt');
+    return { message: 'Logged out' };
   }
 }
