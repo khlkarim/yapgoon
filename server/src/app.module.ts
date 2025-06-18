@@ -7,6 +7,8 @@ import { Channel } from './channel/entities/channel.entity';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { ChatModule } from './chat/chat.module';
+import { Message } from './chat/entities/message.entity';
 
 @Module({
   imports: [
@@ -17,12 +19,13 @@ import { User } from './user/entities/user.entity';
       username: 'root',
       password: 'yapgoon',
       database: 'yapgoon_db',
-      entities: [Channel, User],
+      entities: [Channel, User, Message],
       synchronize: true,
     }),
     AuthModule,
     UserModule,
     ChannelModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,6 +3,7 @@ import { useUser } from "../../hooks/useUser";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import TextInput from "../form/TextInput";
 import { users } from "../../api/users";
+import PasswordInput from "../form/PasswordInput";
 
 function RegisterForm(){
     const { setUser } = useUser();
@@ -36,7 +37,7 @@ function RegisterForm(){
         <form className="flex column" onSubmit={handleSubmit}>
             <TextInput name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
             <TextInput name="email" value={email} placeholder="Your Email..." handleChange={handleChange} />
-            <TextInput name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
+            <PasswordInput name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
 
             <button type="submit" className="box button" style={{ padding: '15px 0px'}}>Register</button>
 

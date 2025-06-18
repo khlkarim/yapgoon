@@ -10,12 +10,15 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 import { Channel } from './entities/channel.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { CurrentUser } from 'src/auth/dto/current-user.dto';
 
+@UseGuards(AuthGuard)
 @Controller('channels')
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
@@ -25,62 +28,61 @@ export class ChannelController {
     return this.channelService.findAll(filters);
   }
 
+  @Get('joined')
+  findJoined(@Req() request: Request) {
+    const user = request['user'] as CurrentUser;
+
+    return this.channelService.findJoined(user);
+  }
+
+  @Get('owned')
+  findOwned(@Req() request: Request) {
+    const user = request['user'] as CurrentUser;
+
+    return this.channelService.findOwned(user);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.channelService.findOne(+id);
   }
 
   @Post()
-  @UseGuards(AuthGuard)
   create(@Req() request: Request, @Body() createChannelDto: CreateChannelDto) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const user = request['user'];
+    const user = request['user'] as CurrentUser;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.channelService.create(createChannelDto, user);
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
   update(
     @Param('id') id: string,
     @Req() request: Request,
     @Body() updateChannelDto: UpdateChannelDto,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const user = request['user'];
+    const user = request['user'] as CurrentUser;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.channelService.update(+id, updateChannelDto, user);
   }
 
   @Patch('join/:id')
-  @UseGuards(AuthGuard)
   join(@Param('id') id: string, @Req() request: Request) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const user = request['user'];
+    const user = request['user'] as CurrentUser;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.channelService.join(+id, user);
   }
 
   @Patch('leave/:id')
-  @UseGuards(AuthGuard)
   leave(@Param('id') id: string, @Req() request: Request) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const user = request['user'];
+    const user = request['user'] as CurrentUser;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.channelService.leave(+id, user);
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
   remove(@Param('id') id: string, @Req() request: Request) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const user = request['user'];
+    const user = request['user'] as CurrentUser;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return this.channelService.remove(+id, user);
   }
 }

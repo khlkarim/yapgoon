@@ -3,6 +3,7 @@ import { NavLink } from "react-router";
 import { useUser } from "../../hooks/useUser";
 import TextInput from "../form/TextInput";
 import { users } from "../../api/users";
+import PasswordInput from "../form/PasswordInput";
 
 function LoginForm(){
     const { setUser } = useUser();
@@ -31,7 +32,7 @@ function LoginForm(){
     return (
         <form className="flex column" onSubmit={handleSubmit}>
             <TextInput name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
-            <TextInput name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
+            <PasswordInput name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
 
             <button type="submit" className="box button" style={{ padding: '15px 0px'}}>Login</button>
 

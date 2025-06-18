@@ -13,7 +13,7 @@ export class AuthService {
   async login(username: string, pass: string): Promise<any> {
     const user = await this.userService.findOne(username);
 
-    if (user?.password !== pass) {
+    if (user.password !== pass) {
       throw new UnauthorizedException();
     }
 
