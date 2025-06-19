@@ -10,10 +10,16 @@ export function useUser(){
     useEffect(() => {
         const currentRoute = location.pathname;
 
-        if(context.user === null && (currentRoute !== '/login' && currentRoute !== '/register')){
+        if(
+            !context.user.loggedIn &&
+            (currentRoute !== '/login' && currentRoute !== '/register')
+        ){
             navigate('/login');
         }
-        if(context.user !== null && (currentRoute === '/login' || currentRoute === '/register')){
+        if(
+            context.user.loggedIn &&
+            (currentRoute === '/login' || currentRoute === '/register')
+        ){
             navigate('/inbox');
         }
     }, [context, navigate, location]);

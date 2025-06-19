@@ -9,7 +9,7 @@ function JoinedChannels(){
     return (
         <div className="flex column">
             <Filter filters={filters} filterList={setFilters} />
-            <List endpoint={'channels/joined'} filters={filters} />
+            <List endpoint={'channels/joined'} filters={filters} action="Leave" />
         </div>
     );  
 }

@@ -5,7 +5,7 @@ function User(){
 
     return (
         <div className="box">
-            {user?.username}
+            { user.username }
         </div>
     );
 }

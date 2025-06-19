@@ -24,7 +24,7 @@ function EditProfile(){
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        users.editProfile({user: {username, email}, setUser});
+        users.editProfile({user: {...user, username, email}, setUser});
     }
 
     return (

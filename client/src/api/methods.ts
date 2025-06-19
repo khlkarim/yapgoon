@@ -24,6 +24,7 @@ async function get({ endpoint, params }: GetParams): Promise<unknown> {
     const response = await fetch(url.toString(), {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
     });
 
     if (!response.ok) {
@@ -52,6 +53,24 @@ async function requestWithBody(
         method,
         headers: { 'Content-Type': 'application/json' },
         body: body ? JSON.stringify(body) : undefined,
+        credentials: 'include',
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Request failed');
+    }
+
+    return response.json();
+}
+
+async function del({ endpoint }: RequestParams) {
+    const url = new URL(endpoint, BASE_URL);
+
+    const response = await fetch(url.toString(), {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
     });
 
     if (!response.ok) {
@@ -66,4 +85,5 @@ export const api = {
     get,
     post,
     patch,
+    del,
 };

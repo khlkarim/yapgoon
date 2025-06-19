@@ -2,9 +2,11 @@ import { useState } from "react";
 import Filter from "../../components/channels/Filter";
 import List from "../../components/channels/List";
 import type { IPartialChannel } from "../../types/IChannel";
+import { useUser } from "../../hooks/useUser";
 
 function Channels(){
-    const [filters, setFilters] = useState<IPartialChannel>(null);
+    useUser();
+    const [filters, setFilters] = useState<IPartialChannel>({});
 
     function filterList(filters: IPartialChannel) {
         if(filters){
@@ -13,14 +15,14 @@ function Channels(){
                 ...filters
             }));
         }else{
-            setFilters(null);
+            setFilters({});
         }
     }
 
     return (
         <div className='flex column w-80'>
             <Filter filters={filters} filterList={filterList} />
-            <List endpoint={'channels'} filters={filters} />
+            <List endpoint={'channels'} filters={filters} action="Join" />
         </div>
     );
 }

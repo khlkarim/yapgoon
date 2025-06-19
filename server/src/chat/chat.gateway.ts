@@ -21,7 +21,6 @@ export class ChatGateway {
   @SubscribeMessage('message')
   handleMessage(@MessageBody() message: CreateMessageDto) {
     const resp = this.chatService.handleMessage(message);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     this.socket.emit(resp.channelName, resp);
   }
 }

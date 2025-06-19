@@ -1,7 +1,10 @@
 import SideBar from "../../components/inbox/SideBar";
 import View from "../../components/inbox/View";
+import { useUser } from "../../hooks/useUser";
 
 function Inbox(){
+    useUser();
+
     return (
         <div className='flex w-80'>
             <SideBar />

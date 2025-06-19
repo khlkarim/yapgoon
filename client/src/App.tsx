@@ -9,6 +9,7 @@ import Inbox from './pages/main/Inbox'
 import Channels from './pages/main/Channels'
 import Profile from './pages/main/Profile'
 import { UserProvider } from './providers/UserProvider';
+import NotificationSystem from './components/notification/NotificationSystem';
 
 function App() {
   return (
@@ -27,10 +28,12 @@ function App() {
           </Route>
 
           <Route
-            path="/"
+            path="*"
             element={<Navigate to="/channels" replace />}
           />
         </Routes>
+  
+        <NotificationSystem />
       </div>
     </UserProvider>
   )

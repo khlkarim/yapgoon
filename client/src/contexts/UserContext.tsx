@@ -7,6 +7,6 @@ export interface IUserContext {
 }
 
 export const UserContext = createContext<IUserContext>({
-    user: null,
+    user: { loggedIn: false },
     setUser: () => {}
 });

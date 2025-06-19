@@ -1,9 +1,9 @@
 export interface IUser {
-    id:string;
+    id: number;
     username: string;
     email: string;
     password: string;
-    access_token: string;
+    loggedIn: boolean;
 }
 
-export type IPartialUser = Partial<IUser> | null;
+export type IPartialUser = Partial<IUser>;

@@ -38,7 +38,7 @@ function Filter({ filters, filterList }: FilterProps){
 export default Filter;
 
 function filtersToString(filters: IPartialChannel): string {
-    return filters?.name ?? '';
+    return filters.name ?? '';
 }
 
 function stringToFilters(search: string): IPartialChannel {

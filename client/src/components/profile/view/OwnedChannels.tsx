@@ -9,7 +9,7 @@ function OwnedChannels(){
     return (
         <div className="flex column">
             <Filter filters={filters} filterList={setFilters} />
-            <List endpoint={'channels/owned'} filters={filters} />
+            <List endpoint={'channels/owned'} filters={filters}  action="Delete" />
         </div>
     );  
 }

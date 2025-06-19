@@ -3,7 +3,7 @@ import { api } from "../api/methods";
 
 interface useFetchProps {
     endpoint: string;
-    params: object;
+    params: Record<string, unknown>;
 }
 
 function useFetch({endpoint, params}: useFetchProps) {
@@ -17,7 +17,7 @@ function useFetch({endpoint, params}: useFetchProps) {
 
         api.get({ endpoint, params })
             .then((data) => {
-                setData(data);
+                setData(data as object);
             })
             .catch((err: Error)=>{
                 setError("Error: " + err.message);

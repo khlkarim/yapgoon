@@ -23,6 +23,12 @@ export class UserController {
     return this.userService.findAll(filters);
   }
 
+  @Get('profile')
+  findProfile(@Req() request: Request) {
+    const user = request['user'] as CurrentUser;
+    return this.userService.findOne(user.username);
+  }
+
   @Patch()
   update(@Req() request: Request, @Body() newUser: UpdateUserDto) {
     const user = request['user'] as CurrentUser;

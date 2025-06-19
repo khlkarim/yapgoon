@@ -1,5 +1,5 @@
+import List from "../channels/List";
 import Filter from "./sidebar/Filter";
-import List from "./sidebar/List";
 
 function SideBar(){
     function filterList(){
@@ -8,8 +8,8 @@ function SideBar(){
 
     return (
         <div className="sidebar flex column">
-            <Filter filters={null} filterList={filterList} />
-            <List />
+            <Filter filters={{}} filterList={filterList} />
+            <List endpoint="channels/joined" filters={{}} action={undefined} />
         </div>
     );
 }

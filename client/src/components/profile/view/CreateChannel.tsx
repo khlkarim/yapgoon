@@ -1,14 +1,11 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { useUser } from "../../../hooks/useUser";
 import TextInput from "../../form/TextInput";
 import { channels } from "../../../api/channels";
 
 function CreateChannel() {
-    const { user } = useUser();
- 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [status, setStatus] = useState(false);
+    const [visibility, setVisibility] = useState(false);
 
     function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         const { name, value } = e.target;
@@ -20,15 +17,15 @@ function CreateChannel() {
             case "description":
                 setDescription(value);
                 break;
-            case "status":
-                setStatus(value === "true" ? true : false);
+            case "public":
+                setVisibility(value === "true" ? true : false);
                 break;
         }
     }
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        channels.createChannel({ channel: {name, description, status}, user });
+        channels.createChannel({ channel: {name, description, public: visibility}});
     }
 
     return (
@@ -40,7 +37,7 @@ function CreateChannel() {
             </div>
             <div className="box flex column">
                 <label htmlFor="name">Status</label>
-                <select name="status" className="box" value={status ? "true" : "false"} onChange={handleChange} style={{ color: 'white', background: 'black' }}>
+                <select name="public" className="box" value={visibility ? "true" : "false"} onChange={handleChange} style={{ color: 'white', background: 'black' }}>
                     <option value="false" className="box" style={{ color: 'white', background: 'black' }}>Private</option>
                     <option value="true" className="box" style={{ color: 'white', background: 'black' }}>Public</option>
                 </select>
