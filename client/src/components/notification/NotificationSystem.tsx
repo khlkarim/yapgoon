@@ -17,6 +17,7 @@ function NotificationSystem() {
           closeButton={false}
           closeOnClick
           newestOnTop
+          position="bottom-right"
         />
     );
 }

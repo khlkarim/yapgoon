@@ -9,7 +9,7 @@ function SideBar(){
     return (
         <div className="sidebar flex column">
             <Filter filters={{}} filterList={filterList} />
-            <List endpoint="channels/joined" filters={{}} action={undefined} />
+            <List endpoint="channels/joined" filters={{}} action={'Select'} />
         </div>
     );
 }

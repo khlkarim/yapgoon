@@ -1,7 +1,11 @@
+import ChatLog from "./view/ChatLog";
+import Input from "./view/Input";
+
 function View(){
     return (
-        <div className="box view">
-            View
+        <div className="box view flex column">
+            <ChatLog />
+            <Input />
         </div>
     );
 }

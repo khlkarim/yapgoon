@@ -1,4 +1,9 @@
+import { IsString } from 'class-validator';
+
 export class CreateMessageDto {
-  channelName: string;
+  @IsString()
+  channel: string;
+
+  @IsString()
   content: string;
 }

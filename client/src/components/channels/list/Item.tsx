@@ -29,7 +29,7 @@ function Item({ channel, action }: ItemProps) {
                     <div style={{ fontWeight: 'bold' }}>{channel.name}</div>
                     <span style={{ color: 'grey' }}>•</span>
                     <div style={{ color: 'grey' }}>{channel.public ? 'Public' : 'Private'}</div>
-                    {action && (
+                    {action != 'Select' && (
                         <>
                             <span style={{ color: 'grey' }}>•</span>
                             <div style={{ color: 'grey' }}>
@@ -42,7 +42,7 @@ function Item({ channel, action }: ItemProps) {
                     <p>{channel.description}</p>
                 </div>
             </div>
-            {action && (
+            {action != 'Select' && (
                 <button
                     className="box button"
                     style={{ flex: 1 }}
