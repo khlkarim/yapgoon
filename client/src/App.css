@@ -76,3 +76,8 @@ a.active > button.box {
   animation: fadeOut 300ms ease forwards;
 }
 /* Notification */
+
+.scrollable {
+  max-height: 70vh;
+  overflow-y: auto;
+}

@@ -1,20 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
+import { WsException } from '@nestjs/websockets';
+
+import { Message } from './entities/message.entity';
+import { CreateMessageDto } from './dto/create-message.dto';
 import { ChannelService } from 'src/channel/channel.service';
 import { UserService } from 'src/user/user.service';
 import { CurrentUser } from 'src/auth/dto/current-user.dto';
-import { WsException } from '@nestjs/websockets';
-import { CreateMessageDto } from './dto/create-message.dto';
 
 @Injectable()
 export class ChatService {
   constructor(
-    private userService: UserService,
-    private channelService: ChannelService,
+    private readonly userService: UserService,
+    private readonly channelService: ChannelService,
     @InjectRepository(Message)
-    private messageRepository: Repository<Message>,
+    private readonly messageRepository: Repository<Message>,
   ) {}
 
   async joinChannel(currentUser: CurrentUser, channelName: string) {
@@ -24,29 +25,32 @@ export class ChatService {
       members: [user],
     });
 
-    if (channels.length != 1) {
-      throw new WsException("Channel doesn't exist or User is not a member");
+    if (channels.length !== 1) {
+      throw new WsException("Channel doesn't exist or user is not a member");
     }
 
-    const channel = channels[0];
-    return channel.messages;
+    return channels[0].messages;
   }
 
-  async sendMessage(currentUser: CurrentUser, message: CreateMessageDto) {
+  async sendMessage(
+    currentUser: CurrentUser,
+    createMessageDto: CreateMessageDto,
+  ) {
     const user = await this.userService.findOne(currentUser.username);
-    const channels = await this.channelService.findAll({
-      name: message.channel,
-      members: [user],
+    const [channel] = await this.channelService.findAll({
+      name: createMessageDto.channel,
     });
 
-    if (channels.length != 1) {
-      throw new WsException("Channel doesn't exist or User is not a member");
+    if (!channel || !channel.members.some((member) => member.id === user.id)) {
+      throw new WsException("Channel doesn't exist or user is not a member");
     }
 
-    return this.messageRepository.save({
-      content: message.content,
-      channel: channels[0],
+    const message = this.messageRepository.create({
+      content: createMessageDto.content,
+      channel,
       owner: user,
     });
+
+    return await this.messageRepository.save(message);
   }
 }

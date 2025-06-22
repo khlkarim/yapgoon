@@ -6,42 +6,50 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { UseGuards, Logger } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UseGuards } from '@nestjs/common';
 import { WsAuthGuard } from 'src/auth/ws.auth.guard';
 import { WsClient } from 'src/auth/dto/ws-client.dto';
 
 @UseGuards(WsAuthGuard)
 @WebSocketGateway({
   cors: {
-    origin: 'http://127.0.0.1:5500',
+    origin: 'http://localhost:5173',
     credentials: true,
   },
 })
 export class ChatGateway {
   @WebSocketServer()
-  socket!: Server;
+  private server!: Server;
 
-  constructor(private chatService: ChatService) {}
+  private readonly logger = new Logger(ChatGateway.name);
+
+  constructor(private readonly chatService: ChatService) {}
 
   @SubscribeMessage('join')
   async handleJoin(
     @MessageBody() channelName: string,
     @ConnectedSocket() client: WsClient,
-  ) {
+  ): Promise<void> {
     try {
       const messages = await this.chatService.joinChannel(
         client.user,
         channelName,
       );
+
       await client.join(channelName);
-      this.socket
+
+      this.server
         .to(channelName)
-        .emit('joined', `${client.user.username} joind the channel`);
-      client.emit('messages', messages);
+        .emit('joined', `${client.user.username} joined the channel`);
+
+      client.emit('accepted', messages);
+
+      this.logger.log(`${client.user.username} joined channel ${channelName}`);
     } catch (err) {
-      client.emit('error', err);
+      client.emit('error', err instanceof Error ? err.message : err);
+      this.logger.error(`Join error: ${err}`);
     }
   }
 
@@ -49,28 +57,36 @@ export class ChatGateway {
   async handleLeave(
     @MessageBody() channelName: string,
     @ConnectedSocket() client: WsClient,
-  ) {
-    this.socket
+  ): Promise<void> {
+    await client.leave(channelName);
+
+    this.server
       .to(channelName)
       .emit('left', `${client.user.username} left the channel`);
-    await client.leave(channelName);
-    console.log(`${client.user.username} left the channel`);
+
+    this.logger.log(`${client.user.username} left channel ${channelName}`);
   }
 
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody() createMessageDto: CreateMessageDto,
     @ConnectedSocket() client: WsClient,
-  ) {
+  ): Promise<void> {
     try {
-      console.log(createMessageDto);
       const message = await this.chatService.sendMessage(
         client.user,
         createMessageDto,
       );
-      this.socket.to(message.channel.name).emit('message', message);
+
+      this.server.to(message.channel.name).emit('message', message);
+
+      this.logger.log(message.channel.name);
+      this.logger.log(
+        `Message sent to channel ${message.channel.name} by ${client.user.username}`,
+      );
     } catch (err) {
-      client.emit('error', err);
+      client.emit('error', err instanceof Error ? err.message : err);
+      this.logger.error(`Message error: ${err}`);
     }
   }
 }

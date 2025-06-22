@@ -55,7 +55,7 @@ export class Channel {
   @Type(() => User)
   members: User[];
 
-  @OneToMany(() => Message, (message) => message.channel)
+  @OneToMany(() => Message, (message) => message.channel, { eager: true })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Message)

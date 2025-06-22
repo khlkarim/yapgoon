@@ -22,7 +22,7 @@ function Channels(){
     return (
         <div className='flex column w-80'>
             <Filter filters={filters} filterList={filterList} />
-            <List endpoint={'channels'} filters={filters} action="Join" />
+            <List endpoint={'channels'} filters={filters} action="Join" selectedChannel={null} selectChannel={() => {}} />
         </div>
     );
 }

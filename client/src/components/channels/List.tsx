@@ -5,10 +5,12 @@ import Item from "./list/Item";
 interface ListProps {
     endpoint: string,
     filters: IPartialChannel,
-    action: string | undefined;
+    action?: "Join" | "Leave" | "Delete" | "Select";
+    selectedChannel: IPartialChannel | null;
+    selectChannel: (channel: IPartialChannel | null) => void;
 }
 
-function List({ endpoint, filters, action }: ListProps) {
+function List({ endpoint, filters, action, selectChannel, selectedChannel }: ListProps) {
     const { data, isLoading, error } = useFetch({
         endpoint,
         params: filters
@@ -39,9 +41,9 @@ function List({ endpoint, filters, action }: ListProps) {
     }
 
     return (
-        <div className="flex column">
+        <div className="flex column scrollable">
             {(data as IChannel[]).map((channel) => (
-                <Item key={channel.id} channel={channel} action={action} />
+                <Item key={channel.id} channel={channel} action={action} selectChannel={selectChannel} selectedChannel={selectedChannel} />
             ))}
         </div>
     );

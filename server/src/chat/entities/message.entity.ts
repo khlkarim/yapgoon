@@ -25,6 +25,6 @@ export class Message {
   @ManyToOne(() => User, (owner) => owner.messages, { eager: true })
   owner: User;
 
-  @ManyToOne(() => Channel, (channel) => channel.messages, { eager: true })
+  @ManyToOne(() => Channel, (channel) => channel.messages)
   channel: Channel;
 }
