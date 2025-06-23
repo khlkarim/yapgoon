@@ -3,8 +3,9 @@ import { useUser } from "../../hooks/useUser";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import TextInput from "../form/TextInput";
 import { users } from "../../api/users";
-import PasswordInput from "../form/PasswordInput";
 import useWS from "../../hooks/useWS";
+import { isValidEmail } from "../../utils/valid";
+import { notify } from "../../utils/notify";
 
 function RegisterForm(){
     const { setUser } = useUser();
@@ -33,6 +34,11 @@ function RegisterForm(){
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
+        if(!isValidEmail(email)) {
+            notify({ status:'error', message:'Email must be valid' });
+            return;
+        }
+
         if(await users.register({user: {username, email, password}, setUser})) {
             connect();
         }
@@ -40,9 +46,9 @@ function RegisterForm(){
 
     return (
         <form className="flex column" onSubmit={handleSubmit}>
-            <TextInput name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
-            <TextInput name="email" value={email} placeholder="Your Email..." handleChange={handleChange} />
-            <PasswordInput name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
+            <TextInput type="text" name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
+            <TextInput type="email" name="email" value={email} placeholder="Your Email..." handleChange={handleChange} />
+            <TextInput type="password" name="password" value={password} placeholder="Your Password..." handleChange={handleChange} />
 
             <button type="submit" className="box button" style={{ padding: '15px 0px'}}>Register</button>
 

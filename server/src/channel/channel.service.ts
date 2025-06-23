@@ -7,7 +7,7 @@ import { CreateChannelDto } from './dto/create-channel.dto';
 import { UpdateChannelDto } from './dto/update-channel.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from './entities/channel.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { CurrentUser } from 'src/auth/dto/current-user.dto';
 
@@ -24,7 +24,10 @@ export class ChannelService {
     relations: string[] = [],
   ): Promise<Channel[]> {
     if (filters && Object.keys(filters).length > 0) {
-      return this.channelsRepository.find({ where: filters, relations });
+      return this.channelsRepository.find({
+        where: this.whereFromFilters(filters),
+        relations,
+      });
     }
 
     return this.channelsRepository.find({ relations });
@@ -43,23 +46,19 @@ export class ChannelService {
     return channel;
   }
 
-  async findJoined(currentUser: CurrentUser) {
+  async findJoined(currentUser: CurrentUser, filters?: Partial<Channel>) {
     const user = await this.userService.findOne(currentUser.username);
 
     return this.channelsRepository.find({
-      where: {
-        members: user,
-      },
+      where: { ...this.whereFromFilters(filters), members: [user] },
     });
   }
 
-  async findOwned(currentUser: CurrentUser) {
+  async findOwned(currentUser: CurrentUser, filters?: Partial<Channel>) {
     const user = await this.userService.findOne(currentUser.username);
 
     return this.channelsRepository.find({
-      where: {
-        owner: user,
-      },
+      where: { ...this.whereFromFilters(filters), owner: user },
     });
   }
 
@@ -86,7 +85,10 @@ export class ChannelService {
       throw new UnauthorizedException("User doesn't own the channel");
     }
 
-    if (await this.channelExists({ name: updateChannelDto.name })) {
+    if (
+      updateChannelDto.name &&
+      (await this.channelExists({ name: updateChannelDto.name }))
+    ) {
       throw new HttpException('Channel name already exists', 400);
     }
 
@@ -109,6 +111,9 @@ export class ChannelService {
     const user = await this.userService.findOne(currentUser.username);
     const channel = await this.findOne(id, ['members']);
 
+    console.log(user.id);
+    console.log(channel.id);
+
     channel.members = channel.members.filter((member) => member.id !== user.id);
     await this.channelsRepository.save(channel);
 
@@ -130,5 +135,25 @@ export class ChannelService {
   async channelExists(filters: Partial<Channel>) {
     const channels = await this.findAll(filters);
     return channels.length > 0;
+  }
+
+  whereFromFilters(filters?: Partial<Channel>) {
+    if (!filters) return {};
+
+    const where: FindOptionsWhere<Channel> = {};
+
+    if (filters.name) {
+      where.name = Like(`%${filters.name}%`);
+    }
+
+    if (filters.description) {
+      where.description = Like(`%${filters.description}%`);
+    }
+
+    if (filters.public !== undefined) {
+      where.public = filters.public;
+    }
+
+    return where;
   }
 }

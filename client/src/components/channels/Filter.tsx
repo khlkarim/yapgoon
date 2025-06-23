@@ -42,5 +42,7 @@ function filtersToString(filters: IPartialChannel): string {
 }
 
 function stringToFilters(search: string): IPartialChannel {
+    console.log(search);
+    if(search.length == 0) return {};
     return {name: search};
 }

@@ -1,9 +1,9 @@
-import { useState, type ChangeEvent, type Dispatch, type SetStateAction } from "react";
+import { useState, type ChangeEvent } from "react";
 import type { IPartialChannel } from "../../../types/IChannel";
 
 interface FilterProps {
-    filters: IPartialChannel,
-    filterList: Dispatch<SetStateAction<IPartialChannel>>
+    filters: IPartialChannel;
+    filterList: (channel: IPartialChannel) => void;
 }
 
 function Filter({ filters, filterList }: FilterProps){

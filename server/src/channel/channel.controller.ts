@@ -29,15 +29,15 @@ export class ChannelController {
   }
 
   @Get('joined')
-  findJoined(@Req() request: Request) {
+  findJoined(@Req() request: Request, @Query() filters: Partial<Channel>) {
     const user = request['user'] as CurrentUser;
-    return this.channelService.findJoined(user);
+    return this.channelService.findJoined(user, filters);
   }
 
   @Get('owned')
-  findOwned(@Req() request: Request) {
+  findOwned(@Req() request: Request, @Query() filters: Partial<Channel>) {
     const user = request['user'] as CurrentUser;
-    return this.channelService.findOwned(user);
+    return this.channelService.findOwned(user, filters);
   }
 
   @Get(':id')

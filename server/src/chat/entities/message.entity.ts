@@ -22,9 +22,14 @@ export class Message {
   @CreateDateColumn({ update: false })
   createdAt: Date;
 
-  @ManyToOne(() => User, (owner) => owner.messages, { eager: true })
+  @ManyToOne(() => User, (owner) => owner.messages, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   owner: User;
 
-  @ManyToOne(() => Channel, (channel) => channel.messages)
+  @ManyToOne(() => Channel, (channel) => channel.messages, {
+    onDelete: 'CASCADE',
+  })
   channel: Channel;
 }

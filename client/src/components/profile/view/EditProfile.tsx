@@ -29,8 +29,8 @@ function EditProfile(){
 
     return (
         <form className="flex column" onSubmit={handleSubmit}>
-            <TextInput name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
-            <TextInput name="email" value={email} placeholder="Your Email..." handleChange={handleChange} />
+            <TextInput type="text" name="username" value={username} placeholder="Your Username..." handleChange={handleChange} />
+            <TextInput type="text" name="email" value={email} placeholder="Your Email..." handleChange={handleChange} />
 
             <button type="submit" className="box button" style={{ padding: '15px 0px'}}>Edit Profile</button>
         </form>

@@ -30,7 +30,7 @@ function CreateChannel() {
 
     return (
         <form className="flex column" onSubmit={handleSubmit}>
-            <TextInput name="name" value={name} placeholder="Channel Name..." handleChange={handleChange} />
+            <TextInput type="text" name="name" value={name} placeholder="Channel Name..." handleChange={handleChange} />
             <div className="box flex column">
                 <label htmlFor="description">Description</label>
                 <textarea name="description" className="box" placeholder="Channel Description" value={description} onChange={handleChange}></textarea>

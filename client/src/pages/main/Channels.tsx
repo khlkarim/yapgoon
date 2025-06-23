@@ -10,8 +10,7 @@ function Channels(){
 
     function filterList(filters: IPartialChannel) {
         if(filters){
-            setFilters((prev) => ({
-                ...prev,
+            setFilters(() => ({
                 ...filters
             }));
         }else{

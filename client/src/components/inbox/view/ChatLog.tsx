@@ -11,10 +11,18 @@ interface ChatLogProps {
 
 function ChatLog({ selectedChannel }: ChatLogProps) {
     const socket = useWS().socketRef?.current;
+
     const [messages, setMessages] = useState<IPartialMessage[]>([]);
     const messagesRef = useRef(messages);
 
-    // Keep messagesRef in sync with messages state
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages]);
+
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
@@ -66,7 +74,7 @@ function ChatLog({ selectedChannel }: ChatLogProps) {
     }, [socket, selectedChannel]);
 
     return (
-        <div className="flex column scrollable" style={{ flex: 1, justifyContent:'start', gap: '10px' }}>
+        <div ref={scrollRef} className="flex column scrollable" style={{ flex: 1, justifyContent:'start', gap: '10px' }}>
             {messages.map((message, index) => {
                 return <Message key={index} message={message} />
             })}

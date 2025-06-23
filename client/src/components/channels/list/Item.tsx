@@ -38,40 +38,43 @@ function Item({ channel, action, selectChannel }: ItemProps) {
     return (
         <div
             className="box flex"
-            style={{ alignItems: "center" }}
+            style={{
+            alignItems: "center",
+            cursor: action === "Select" ? "pointer" : undefined,
+            }}
             onClick={handleSelect}
         >
             <div style={{ flex: 5 }}>
-                <div className="flex" style={{ justifyContent: "left" }}>
-                    <div style={{ fontWeight: "bold" }}>{channel.name}</div>
+            <div className="flex" style={{ justifyContent: "left" }}>
+                <div style={{ fontWeight: "bold" }}>{channel.name}</div>
+                <span style={{ color: "grey" }}>•</span>
+                <div style={{ color: "grey" }}>
+                {channel.public ? "Public" : "Private"}
+                </div>
+                {action !== "Select" && (
+                <>
                     <span style={{ color: "grey" }}>•</span>
                     <div style={{ color: "grey" }}>
-                        {channel.public ? "Public" : "Private"}
+                    {new Date(channel.createdAt)
+                        .toLocaleDateString("en-CA")
+                        .replace(/\//g, "-")}
                     </div>
-                    {action !== "Select" && (
-                        <>
-                            <span style={{ color: "grey" }}>•</span>
-                            <div style={{ color: "grey" }}>
-                                {new Date(channel.createdAt)
-                                    .toLocaleDateString("en-CA")
-                                    .replace(/\//g, "-")}
-                            </div>
-                        </>
-                    )}
-                </div>
-                <div>
-                    <p>{channel.description}</p>
-                </div>
+                </>
+                )}
+            </div>
+            <div>
+                <p>{channel.description}</p>
+            </div>
             </div>
             {action && action !== "Select" && (
-                <button
-                    className="box button"
-                    style={{ flex: 1 }}
-                    onClick={handleAction}
-                    type="button"
-                >
-                    {action}
-                </button>
+            <button
+                className="box button"
+                style={{ flex: 1 }}
+                onClick={handleAction}
+                type="button"
+            >
+                {action}
+            </button>
             )}
         </div>
     );

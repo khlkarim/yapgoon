@@ -43,7 +43,7 @@ async function register({ user, setUser }: Params) {
 
 async function editProfile({ user, setUser }: Params) {
     try {
-        await api.patch({ endpoint: `users/${user.id}`, body: user });
+        await api.patch({ endpoint: `users`, body: { username: user.username, email: user.email }});
         
         let profile = await api.get({ endpoint: "users/profile" }) as IPartialUser;
         profile = { ...profile, loggedIn: true };
