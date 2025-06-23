@@ -13,16 +13,19 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  findAll(filters: Partial<User>): Promise<User[]> {
+  findAll(filters: Partial<User>, relations: string[] = []): Promise<User[]> {
     if (filters && Object.keys(filters).length > 0) {
-      return this.userRepository.find({ where: filters });
+      return this.userRepository.find({ where: filters, relations });
     }
 
-    return this.userRepository.find();
+    return this.userRepository.find({ relations });
   }
 
-  async findOne(username: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { username } });
+  async findOne(username: string, relations: string[] = []): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { username },
+      relations,
+    });
 
     if (!user) {
       throw new HttpException('User not found', 404);
@@ -32,22 +35,15 @@ export class UserService {
   }
 
   async create(user: CreateUserDto): Promise<User> {
-    const existingUser = await this.findAll({ username: user.username });
-    if (existingUser.length) {
+    if (await this.userExists({ username: user.username })) {
       throw new HttpException('Username already taken', 404);
     }
 
-    return await this.userRepository.save({
-      ...user,
-      ownedChannels: [],
-      joinedChannels: [],
-      messages: [],
-    });
+    return await this.userRepository.save(user);
   }
 
   async update(currentUser: CurrentUser, newUser: UpdateUserDto) {
     const user = await this.findOne(currentUser.username);
-
     return this.userRepository.update(user.id, newUser);
   }
 
@@ -59,5 +55,10 @@ export class UserService {
     }
 
     return result;
+  }
+
+  async userExists(filters: Partial<User>) {
+    const users = await this.findAll(filters);
+    return users.length > 0;
   }
 }

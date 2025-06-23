@@ -7,13 +7,15 @@ import useWS from "../../hooks/useWS";
 
 function Inbox(){
     useUser();
-    const socket = useWS();
+    const socket = useWS().socketRef?.current;
     const [selectedChannel, setSelectedChannel] = useState<IPartialChannel | null>(null);
 
     function selectChannel(channel: IPartialChannel | null) {
         setSelectedChannel(channel);
+        console.log(socket);
         
-        if(socket && channel) {
+        if(socket && channel && (!selectedChannel || channel.name != selectedChannel.name)) {
+            if(selectedChannel) socket.emit('leave', selectedChannel.name);
             socket.emit('join', channel.name);
         }
     }

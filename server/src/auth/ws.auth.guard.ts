@@ -20,6 +20,7 @@ export class WsAuthGuard implements CanActivate {
       client.emit('error', { message: 'Unauthorized' });
       return false;
     }
+
     try {
       const payload: CurrentUser = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,

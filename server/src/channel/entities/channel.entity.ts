@@ -43,12 +43,12 @@ export class Channel {
   @IsOptional()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.ownedChannels, { eager: true })
+  @ManyToOne(() => User, (user) => user.ownedChannels)
   @ValidateNested()
   @Type(() => User)
   owner: User;
 
-  @ManyToMany(() => User, (user) => user.joinedChannels, { eager: true })
+  @ManyToMany(() => User, (user) => user.joinedChannels)
   @JoinTable()
   @IsArray()
   @ValidateNested({ each: true })

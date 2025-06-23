@@ -1,8 +1,16 @@
 import { NavLink } from "react-router";
 import User from "./sidebar/User";
+import { users } from "../../api/users";
+import { useUser } from "../../hooks/useUser";
 
 
 function SideBar(){
+    const { setUser } = useUser();
+
+    function handleLogout() {
+        users.logout({setUser});
+    }
+
     return (
         <div className="sidebar flex column" style={{ justifyContent:'start' }}>
             <User />
@@ -20,6 +28,7 @@ function SideBar(){
                 <NavLink to='/profile/joined-channels' className={({ isActive }) => isActive? 'active':''}>
                     <button className='box w-100 button'>Joined Channels</button>
                 </NavLink>
+                <button className='box w-100 button' onClick={handleLogout}>Logout</button>
             </nav>
         </div>
     );

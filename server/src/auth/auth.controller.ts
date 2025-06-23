@@ -31,7 +31,6 @@ export class AuthController {
       sameSite: 'none',
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-      partitioned: true,
     });
 
     return { message: 'Login successful' };
@@ -39,8 +38,21 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.OK)
-  register(@Body() createUserDto: CreateUserDto) {
-    return this.authService.register(createUserDto);
+  async register(
+    @Res({ passthrough: true }) res: Response,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    const token = await this.authService.register(createUserDto);
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      partitioned: true,
+    });
+
+    return { message: 'Register successful' };
   }
 
   @Post('logout')

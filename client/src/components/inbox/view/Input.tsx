@@ -7,7 +7,7 @@ interface InputProps {
 }
 
 function Input({ selectedChannel }: InputProps) {
-    const socket = useWS();
+    const socket = useWS().socketRef?.current;
     const [message, setMessage] = useState("");
 
     function handleSend() {

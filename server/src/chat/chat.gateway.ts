@@ -6,7 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { UseGuards, Logger } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { WsAuthGuard } from 'src/auth/ws.auth.guard';
@@ -22,9 +22,6 @@ import { WsClient } from 'src/auth/dto/ws-client.dto';
 export class ChatGateway {
   @WebSocketServer()
   private server!: Server;
-
-  private readonly logger = new Logger(ChatGateway.name);
-
   constructor(private readonly chatService: ChatService) {}
 
   @SubscribeMessage('join')
@@ -37,19 +34,14 @@ export class ChatGateway {
         client.user,
         channelName,
       );
-
       await client.join(channelName);
+      client.emit('accepted', messages);
 
       this.server
         .to(channelName)
         .emit('joined', `${client.user.username} joined the channel`);
-
-      client.emit('accepted', messages);
-
-      this.logger.log(`${client.user.username} joined channel ${channelName}`);
     } catch (err) {
       client.emit('error', err instanceof Error ? err.message : err);
-      this.logger.error(`Join error: ${err}`);
     }
   }
 
@@ -59,12 +51,9 @@ export class ChatGateway {
     @ConnectedSocket() client: WsClient,
   ): Promise<void> {
     await client.leave(channelName);
-
     this.server
       .to(channelName)
       .emit('left', `${client.user.username} left the channel`);
-
-    this.logger.log(`${client.user.username} left channel ${channelName}`);
   }
 
   @SubscribeMessage('message')
@@ -79,14 +68,8 @@ export class ChatGateway {
       );
 
       this.server.to(message.channel.name).emit('message', message);
-
-      this.logger.log(message.channel.name);
-      this.logger.log(
-        `Message sent to channel ${message.channel.name} by ${client.user.username}`,
-      );
     } catch (err) {
       client.emit('error', err instanceof Error ? err.message : err);
-      this.logger.error(`Message error: ${err}`);
     }
   }
 }

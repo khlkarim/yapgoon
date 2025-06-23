@@ -4,9 +4,11 @@ import { useUser } from "../../hooks/useUser";
 import TextInput from "../form/TextInput";
 import { users } from "../../api/users";
 import PasswordInput from "../form/PasswordInput";
+import useWS from "../../hooks/useWS";
 
 function LoginForm(){
     const { setUser } = useUser();
+    const { connect } = useWS();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -24,9 +26,12 @@ function LoginForm(){
         }
     }
 
-    function handleSubmit(e: FormEvent<HTMLFormElement>){
+    async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        users.login({user: {username, password}, setUser});
+        
+        if (await users.login({user: {username, password}, setUser})) {
+            connect();
+        }
     }
 
     return (

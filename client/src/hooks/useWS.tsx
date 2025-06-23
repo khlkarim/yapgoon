@@ -3,7 +3,7 @@ import { WsContext } from "../contexts/WsContext";
 
 function useWS() {
     const context = useContext(WsContext);
-    return context?.current;
+    return context;
 }
 
 export default useWS;

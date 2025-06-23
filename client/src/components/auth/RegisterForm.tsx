@@ -4,9 +4,11 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import TextInput from "../form/TextInput";
 import { users } from "../../api/users";
 import PasswordInput from "../form/PasswordInput";
+import useWS from "../../hooks/useWS";
 
 function RegisterForm(){
     const { setUser } = useUser();
+    const { connect } = useWS();
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -28,9 +30,12 @@ function RegisterForm(){
         }
     }
 
-    function handleSubmit(e: FormEvent<HTMLFormElement>){
+    async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
-        users.register({user: {username, email, password}, setUser});
+
+        if(await users.register({user: {username, email, password}, setUser})) {
+            connect();
+        }
     }
 
     return (

@@ -19,17 +19,22 @@ export class ChannelService {
     private userService: UserService,
   ) {}
 
-  findAll(filters?: Partial<Channel>): Promise<Channel[]> {
+  findAll(
+    filters?: Partial<Channel>,
+    relations: string[] = [],
+  ): Promise<Channel[]> {
     if (filters && Object.keys(filters).length > 0) {
-      filters.public = true;
-      return this.channelsRepository.find({ where: filters });
+      return this.channelsRepository.find({ where: filters, relations });
     }
 
-    return this.channelsRepository.find();
+    return this.channelsRepository.find({ relations });
   }
 
-  async findOne(id: number): Promise<Channel> {
-    const channel = await this.channelsRepository.findOne({ where: { id } });
+  async findOne(id: number, relations: string[] = []): Promise<Channel> {
+    const channel = await this.channelsRepository.findOne({
+      where: { id },
+      relations,
+    });
 
     if (!channel) {
       throw new HttpException(`Channel with id ${id} not found`, 404);
@@ -62,8 +67,7 @@ export class ChannelService {
     const user = await this.userService.findOne(currentUser.username);
     const channel = { ...createChannelDto, members: [user], owner: user };
 
-    const existingChannel = await this.findAll({ name: channel.name });
-    if (existingChannel.length > 0) {
+    if (await this.channelExists({ name: channel.name })) {
       throw new HttpException('Channel name already exists', 400);
     }
 
@@ -76,19 +80,14 @@ export class ChannelService {
     currentUser: CurrentUser,
   ) {
     const user = await this.userService.findOne(currentUser.username);
-    const channel = await this.findOne(id);
+    const channel = await this.findOne(id, ['owner']);
 
     if (channel.owner.username !== user.username) {
       throw new UnauthorizedException("User doesn't own the channel");
     }
 
-    if (updateChannelDto.name) {
-      const existingChannel = await this.findAll({
-        name: updateChannelDto.name,
-      });
-      if (existingChannel.length > 0) {
-        throw new HttpException('Channel name already exists', 400);
-      }
+    if (await this.channelExists({ name: updateChannelDto.name })) {
+      throw new HttpException('Channel name already exists', 400);
     }
 
     return this.channelsRepository.update(id, updateChannelDto);
@@ -96,18 +95,19 @@ export class ChannelService {
 
   async join(id: number, currentUser: CurrentUser) {
     const user = await this.userService.findOne(currentUser.username);
-    const channel = await this.findOne(id);
+    const channel = await this.findOne(id, ['members']);
 
     if (!channel.members.find((member) => member.id === user.id)) {
       channel.members.push(user);
       await this.channelsRepository.save(channel);
     }
+
     return channel;
   }
 
   async leave(id: number, currentUser: CurrentUser) {
     const user = await this.userService.findOne(currentUser.username);
-    const channel = await this.findOne(id);
+    const channel = await this.findOne(id, ['members']);
 
     channel.members = channel.members.filter((member) => member.id !== user.id);
     await this.channelsRepository.save(channel);
@@ -117,7 +117,7 @@ export class ChannelService {
 
   async remove(id: number, currentUser: CurrentUser) {
     const user = await this.userService.findOne(currentUser.username);
-    const channel = await this.findOne(id);
+    const channel = await this.findOne(id, ['owner']);
 
     if (channel.owner.username !== user.username) {
       throw new UnauthorizedException("User doesn't own the channel");
@@ -125,5 +125,10 @@ export class ChannelService {
 
     const result = await this.channelsRepository.delete(id);
     return result;
+  }
+
+  async channelExists(filters: Partial<Channel>) {
+    const channels = await this.findAll(filters);
+    return channels.length > 0;
   }
 }

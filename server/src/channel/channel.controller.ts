@@ -31,14 +31,12 @@ export class ChannelController {
   @Get('joined')
   findJoined(@Req() request: Request) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.findJoined(user);
   }
 
   @Get('owned')
   findOwned(@Req() request: Request) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.findOwned(user);
   }
 
@@ -50,7 +48,6 @@ export class ChannelController {
   @Post()
   create(@Req() request: Request, @Body() createChannelDto: CreateChannelDto) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.create(createChannelDto, user);
   }
 
@@ -61,28 +58,24 @@ export class ChannelController {
     @Body() updateChannelDto: UpdateChannelDto,
   ) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.update(+id, updateChannelDto, user);
   }
 
   @Patch('join/:id')
   join(@Param('id') id: string, @Req() request: Request) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.join(+id, user);
   }
 
   @Patch('leave/:id')
   leave(@Param('id') id: string, @Req() request: Request) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.leave(+id, user);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @Req() request: Request) {
     const user = request['user'] as CurrentUser;
-
     return this.channelService.remove(+id, user);
   }
 }

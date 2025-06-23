@@ -34,7 +34,6 @@ function App() {
               element={<Navigate to="/channels" replace />}
             />
           </Routes>
-    
           <NotificationSystem />
         </div>
       </WsProvider>

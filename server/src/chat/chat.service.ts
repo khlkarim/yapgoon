@@ -12,18 +12,21 @@ import { CurrentUser } from 'src/auth/dto/current-user.dto';
 @Injectable()
 export class ChatService {
   constructor(
-    private readonly userService: UserService,
-    private readonly channelService: ChannelService,
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
+    private readonly userService: UserService,
+    private readonly channelService: ChannelService,
   ) {}
 
   async joinChannel(currentUser: CurrentUser, channelName: string) {
     const user = await this.userService.findOne(currentUser.username);
-    const channels = await this.channelService.findAll({
-      name: channelName,
-      members: [user],
-    });
+    const channels = await this.channelService.findAll(
+      {
+        name: channelName,
+        members: [user],
+      },
+      ['messages'],
+    );
 
     if (channels.length !== 1) {
       throw new WsException("Channel doesn't exist or user is not a member");
@@ -37,17 +40,21 @@ export class ChatService {
     createMessageDto: CreateMessageDto,
   ) {
     const user = await this.userService.findOne(currentUser.username);
-    const [channel] = await this.channelService.findAll({
-      name: createMessageDto.channel,
-    });
+    const channels = await this.channelService.findAll(
+      {
+        name: createMessageDto.channel,
+        members: [user],
+      },
+      ['messages'],
+    );
 
-    if (!channel || !channel.members.some((member) => member.id === user.id)) {
+    if (channels.length !== 1) {
       throw new WsException("Channel doesn't exist or user is not a member");
     }
 
     const message = this.messageRepository.create({
       content: createMessageDto.content,
-      channel,
+      channel: channels[0],
       owner: user,
     });
 

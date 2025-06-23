@@ -11,35 +11,57 @@ interface Params {
 async function login({ user, setUser }: Params) {
     try {
         await api.post({ endpoint: "auth/login", body: user });
-        const profile = await api.get({ endpoint: "users/profile" });
-        const updatedUser = { ...(profile as IPartialUser), loggedIn: true } as IPartialUser;
-        setUser(updatedUser);
+        
+        let profile = await api.get({ endpoint: "users/profile" }) as IPartialUser;
+        profile = { ...profile, loggedIn: true };
+
+        setUser(profile);
         notify({ status: "success", message: "Logged In Successfully" });
-        console.log(updatedUser);
+        console.log(profile);
+        return true;
     } catch {
         notify({ status: "error", message: "Failed To Login" });
+        return false;
     }
 }
 
 async function register({ user, setUser }: Params) {
     try {
         await api.post({ endpoint: "auth/register", body: user });
-        const profile = await api.get({ endpoint: "users/profile" });
-        const updatedUser = { ...(profile as IPartialUser), loggedIn: true } as IPartialUser;
-        setUser(updatedUser);
+
+        let profile = await api.get({ endpoint: "users/profile" }) as IPartialUser;
+        profile = { ...profile, loggedIn: true };
+
+        setUser(profile);
         notify({ status: "success", message: "Registered Successfully" });
+        return true;
     } catch {
         notify({ status: "error", message: "Failed To Register" });
+        return false;
     }
 }
 
 async function editProfile({ user, setUser }: Params) {
     try {
         await api.patch({ endpoint: `users/${user.id}`, body: user });
-        setUser(user);
+        
+        let profile = await api.get({ endpoint: "users/profile" }) as IPartialUser;
+        profile = { ...profile, loggedIn: true };
+
+        setUser(profile);
         notify({ status: "success", message: "Profile Edited Successfully" });
     } catch {
         notify({ status: "error", message: "Failed To Edit Profile" });
+    }
+}
+
+async function logout({ setUser }: { setUser: Dispatch<SetStateAction<IPartialUser>> }) {
+    try {
+        await api.post({ endpoint: "auth/logout" });        
+        setUser({loggedIn: false});
+        notify({ status: "success", message: "Logged Out Successfully" });
+    } catch {
+        notify({ status: "error", message: "Failed To Logout" });
     }
 }
 
@@ -47,4 +69,5 @@ export const users = {
     login,
     register,
     editProfile,
+    logout,
 };

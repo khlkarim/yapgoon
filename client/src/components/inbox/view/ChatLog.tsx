@@ -10,7 +10,7 @@ interface ChatLogProps {
 }
 
 function ChatLog({ selectedChannel }: ChatLogProps) {
-    const socket = useWS();
+    const socket = useWS().socketRef?.current;
     const [messages, setMessages] = useState<IPartialMessage[]>([]);
     const messagesRef = useRef(messages);
 
@@ -66,7 +66,7 @@ function ChatLog({ selectedChannel }: ChatLogProps) {
     }, [socket, selectedChannel]);
 
     return (
-        <div className="scrollable" style={{ flex: 1 }}>
+        <div className="flex column scrollable" style={{ flex: 1, justifyContent:'start', gap: '10px' }}>
             {messages.map((message, index) => {
                 return <Message key={index} message={message} />
             })}
