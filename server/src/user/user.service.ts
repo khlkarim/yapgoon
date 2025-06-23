@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CurrentUser } from 'src/auth/dto/current-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -38,6 +39,8 @@ export class UserService {
     if (await this.userExists({ username: user.username })) {
       throw new HttpException('Username already taken', 404);
     }
+    const saltOrRounds = 10;
+    user.password = await bcrypt.hash(user.password, saltOrRounds);
 
     return await this.userRepository.save(user);
   }
