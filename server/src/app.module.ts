@@ -14,7 +14,7 @@ import { Message } from './chat/entities/message.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'mysql',
       port: 3306,
       username: 'root',
       password: 'yapgoon',
