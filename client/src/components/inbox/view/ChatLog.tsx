@@ -37,38 +37,23 @@ function ChatLog({ selectedChannel }: ChatLogProps) {
 
         const handleAccepted = (msgs: IPartialMessage[]) => {
             if (msgs) setMessages(msgs);
-            console.log('accepted', msgs);
         };
 
         const handleMessage = (msg: IPartialMessage) => {
             if (msg) setMessages([...messagesRef.current, msg]);
-            console.log(msg, messagesRef.current);
         };
 
-        const handleJoined = (username: string) => {
-            console.log(username + " joined");
-        };
-
-        const handleLeft = (username: string) => {
-            console.log(username + " left");
-        };
-
-        const handleError = (err: unknown) => {
+        const handleError = () => {
             notify({ status: "error", message: "An Error Occurred" });
-            console.log(err);
         };
 
         socket.on("accepted", handleAccepted);
         socket.on("message", handleMessage);
-        socket.on("joined", handleJoined);
-        socket.on("left", handleLeft);
         socket.on("error", handleError);
 
         return () => {
             socket.off("accepted", handleAccepted);
             socket.off("message", handleMessage);
-            socket.off("joined", handleJoined);
-            socket.off("left", handleLeft);
             socket.off("error", handleError);
         };
     }, [socket, selectedChannel]);

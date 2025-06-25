@@ -10,8 +10,12 @@ function createChannel({ channel }: Params){
     api.post({endpoint: 'channels', body: (channel as object)})
     .then(() => {
         notify({status: "success", message: "Channel Created Successfully"});
-    }).catch(() => {
-        notify({status: "error", message: "Failed To Create Channel"});
+    }).catch((error: unknown) => {
+        let message = "Failed To Create Channel";
+        if(error instanceof Error) {
+            message = error.message;
+        }
+        notify({ status: "error", message: message.charAt(0).toUpperCase() + message.slice(1) });
     });
 }
 
@@ -37,8 +41,12 @@ function updateChannel({ channel }: Params){
     api.patch({endpoint: 'channels', body: (channel as object)})
     .then(() => {
         notify({status: "success", message: "Channel Updated Successfully"});
-    }).catch(() => {
-        notify({status: "error", message: "Failed To Update Channel"});
+    }).catch((error: unknown) => {
+        let message = "Failed To Update Channel";
+        if(error instanceof Error) {
+            message = error.message;
+        }
+        notify({ status: "error", message: message.charAt(0).toUpperCase() + message.slice(1) });
     });
 }
 

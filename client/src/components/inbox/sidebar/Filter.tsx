@@ -26,7 +26,7 @@ function Filter({ filters, filterList }: FilterProps){
                 name="search"
                 style={{ background: 'black' }}
                 className="box"
-                placeholder="Seach for a specific channel... (you can use tags: @name, @owner...)"
+                placeholder="Seach for a specific channel..."
                 value={search}
                 onChange={handleChange}
             />

@@ -17,10 +17,9 @@ async function login({ user, setUser }: Params) {
 
         setUser(profile);
         notify({ status: "success", message: "Logged In Successfully" });
-        console.log(profile);
         return true;
     } catch {
-        notify({ status: "error", message: "Failed To Login" });
+        notify({ status: "error", message: "Invalid Credentials"});
         return false;
     }
 }
@@ -35,8 +34,12 @@ async function register({ user, setUser }: Params) {
         setUser(profile);
         notify({ status: "success", message: "Registered Successfully" });
         return true;
-    } catch {
-        notify({ status: "error", message: "Failed To Register" });
+    } catch(error: unknown) {
+        let message = "Failed To Register";
+        if(error instanceof Error) {
+            message = error.message;
+        }
+        notify({ status: "error", message: message.charAt(0).toUpperCase() + message.slice(1) });
         return false;
     }
 }
@@ -50,8 +53,13 @@ async function editProfile({ user, setUser }: Params) {
 
         setUser(profile);
         notify({ status: "success", message: "Profile Edited Successfully" });
-    } catch {
-        notify({ status: "error", message: "Failed To Edit Profile" });
+    } catch(error: unknown) {
+        let message = "Failed To Edit Profile";
+        if(error instanceof Error) {
+            message = error.message;
+        }
+        notify({ status: "error", message: message.charAt(0).toUpperCase() + message.slice(1) });
+        return false;
     }
 }
 

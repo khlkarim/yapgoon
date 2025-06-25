@@ -12,7 +12,6 @@ function Inbox(){
 
     function selectChannel(channel: IPartialChannel | null) {
         setSelectedChannel(channel);
-        console.log(socket);
         
         if(socket && channel && (!selectedChannel || channel.name != selectedChannel.name)) {
             if(selectedChannel) socket.emit('leave', selectedChannel.name);

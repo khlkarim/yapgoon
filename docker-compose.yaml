@@ -6,8 +6,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: yapgoon
       MYSQL_DATABASE: yapgoon_db
-    volumes:
-      - ./scripts:/docker-entrypoint-initdb.d
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

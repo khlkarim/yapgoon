@@ -111,9 +111,6 @@ export class ChannelService {
     const user = await this.userService.findOne(currentUser.username);
     const channel = await this.findOne(id, ['members']);
 
-    console.log(user.id);
-    console.log(channel.id);
-
     channel.members = channel.members.filter((member) => member.id !== user.id);
     await this.channelsRepository.save(channel);
 

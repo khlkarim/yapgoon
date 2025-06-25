@@ -26,7 +26,7 @@ function Filter({ filters, filterList }: FilterProps){
                 name="search"
                 style={{ flex:5, background: 'black' }}
                 className="box"
-                placeholder="Seach for a specific channel... (you can use tags: @name, @owner...)"
+                placeholder="Seach for a specific channel..."
                 value={search}
                 onChange={handleChange}
             />            
@@ -42,7 +42,6 @@ function filtersToString(filters: IPartialChannel): string {
 }
 
 function stringToFilters(search: string): IPartialChannel {
-    console.log(search);
     if(search.length == 0) return {};
     return {name: search};
 }

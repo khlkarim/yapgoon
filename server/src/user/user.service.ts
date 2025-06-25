@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -37,7 +37,7 @@ export class UserService {
 
   async create(user: CreateUserDto): Promise<User> {
     if (await this.userExists({ username: user.username })) {
-      throw new HttpException('Username already taken', 404);
+      throw new BadRequestException('Username already taken');
     }
     const saltOrRounds = 10;
     user.password = await bcrypt.hash(user.password, saltOrRounds);
@@ -47,7 +47,32 @@ export class UserService {
 
   async update(currentUser: CurrentUser, newUser: UpdateUserDto) {
     const user = await this.findOne(currentUser.username);
-    return this.userRepository.update(user.id, newUser);
+
+    if (
+      newUser.username &&
+      newUser.username !== user.username &&
+      (await this.userExists({ username: newUser.username }))
+    ) {
+      throw new BadRequestException('Username already taken');
+    }
+
+    if (
+      newUser.email &&
+      newUser.email !== user.email &&
+      (await this.userExists({ email: newUser.email }))
+    ) {
+      throw new BadRequestException('Email already taken');
+    }
+
+    const updateData: Partial<UpdateUserDto> = {};
+    if (newUser.username && newUser.username !== user.username) {
+      updateData.username = newUser.username;
+    }
+    if (newUser.email && newUser.email !== user.email) {
+      updateData.email = newUser.email;
+    }
+
+    return this.userRepository.update(user.id, updateData);
   }
 
   async remove(id: number) {
